@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8669ea52-6c29-4e1e-91cc-67f5d58cadcc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/com/igema/main/dades/controlador/ControladorDades.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/igema/main/dades/controlador/ControladorDades.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/igema/main/domini/classes/Assignatura.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/igema/main/domini/classes/Assignatura.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/igema/main/vistes/escenes/notesAssignatura.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/igema/main/vistes/escenes/notesAssignatura.fxml" afterDir="false" />
-    </list>
+    <list default="true" id="8669ea52-6c29-4e1e-91cc-67f5d58cadcc" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -154,6 +150,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="sqlserver" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="database.console.LAST_STATE" value="false" />
@@ -249,7 +246,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24963397" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
