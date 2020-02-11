@@ -19,7 +19,7 @@ public final class ControladorDades {
      */
     private static ControladorDades instancia;
 
-    public ControladorDades() throws SQLException {
+    public ControladorDades() {
         if (Conexion.getConexio() == null) new Conexion();
     }
 

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="521.0" prefWidth="934.0" xmlns="http://javafx.com/javafx/8"
+<AnchorPane fx:id="anchor" prefHeight="521.0" prefWidth="934.0" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igema.main.vistes.NotesAssignaturaManager">
+    <children>
         <ComboBox id="assignaturaComboBox" fx:id="assignaturaComboBox" layoutX="88.0" layoutY="33.0" onAction="#cargarTaula" prefHeight="25.0" prefWidth="381.0" />
         <Text layoutX="14.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignatura" />
         <ComboBox id="cursComboBox" fx:id="cursComboBox" layoutX="581.0" layoutY="33.0" onAction="#cargarTaula" prefHeight="25.0" prefWidth="197.0" />
@@ -23,4 +27,5 @@
         <Button fx:id="editar" layoutX="151.0" layoutY="462.0" mnemonicParsing="false" onAction="#activarEdicio" prefHeight="33.0" prefWidth="113.0" text="Editar" />
         <Button fx:id="guardar" layoutX="599.0" layoutY="462.0" mnemonicParsing="false" onAction="#guardarCanvis" prefHeight="33.0" prefWidth="113.0" text="Guardar" />
         <Button fx:id="cancelar" layoutX="778.0" layoutY="462.0" mnemonicParsing="false" onAction="#cancelarCanvis" prefHeight="33.0" prefWidth="113.0" text="Cancelar" />
+    </children>
 </AnchorPane>
