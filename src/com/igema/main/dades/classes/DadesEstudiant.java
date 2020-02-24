@@ -3,9 +3,11 @@ package com.igema.main.dades.classes;
 import com.igema.main.dades.conexionBD.Conexion;
 import com.igema.main.domini.classes.Estudiant;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class DadesEstudiant {
         PreparedStatement ps;
         ps = con.prepareCall("SELECT ID_ALUMNE, DNI, NOMBRE, APELLIDOS FROM Estudiants");
         if (con != null) {
+            ps.execute();
             ResultSet rs = ps.getResultSet();
             while (rs.next()) {
                 Estudiant e = new Estudiant();
@@ -50,6 +53,7 @@ public class DadesEstudiant {
         ps.setString(1, alumne);
         ps.setString(2, alumne);
         if (con != null) {
+            ps.execute();
             ResultSet rs = ps.getResultSet();
             while (rs.next()) {
                 Estudiant e = new Estudiant();
@@ -68,6 +72,7 @@ public class DadesEstudiant {
         PreparedStatement ps;
         ps = con.prepareCall("SELECT * FROM Estudiants");
         if (con != null) {
+            ps.execute();
             ResultSet rs = ps.getResultSet();
             while (rs.next()) {
                 Estudiant e = new Estudiant();
@@ -94,6 +99,7 @@ public class DadesEstudiant {
         ps.setString(1, dni);
         if (con != null) {
             //Fer la consulta
+            ps.execute();
             ResultSet rs = ps.getResultSet();
             while (rs.next()) {
                 e.setDni(dni);
@@ -122,4 +128,20 @@ public class DadesEstudiant {
         return e;
     }
 
+    public String getNomCognoms(String dni) throws SQLException {
+        String nomCognoms = "";
+        PreparedStatement ps;
+        ps = con.prepareCall("SELECT NOMBRE, APELLIDOS FROM Estudiants WHERE DNI = ?");
+        ps.setString(1, dni);
+        if (con != null) {
+            ps.execute();
+            ResultSet rs = ps.getResultSet();
+            while (rs.next()) {
+                nomCognoms = rs.getString("NOMBRE") + "/" + rs.getString("APELLIDOS");
+            }
+        } else {
+            System.out.println("No s'ha pogut establir connexió amb la base de dades.");
+        }
+        return nomCognoms;
+    }
 }

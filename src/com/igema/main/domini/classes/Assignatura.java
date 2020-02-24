@@ -9,11 +9,11 @@ public class Assignatura {
     private Character tipologia;
     private String materia;
 
-    private final int REQUERITSBASICA = 60;
-    private final int REQUERITSOBLIGATORIA = 120;
-    private final int REQUERITSOPTATIVA = 30;
-    private final int REQUERITSPRACTIQUES = 24;
-    private final int REQUERITSTFG = 6;
+    public final int REQUERITSBASICA = 60;
+    public final int REQUERITSOBLIGATORIA = 120;
+    public final int REQUERITSOPTATIVA = 30;
+    public final int REQUERITSPRACTIQUES = 24;
+    public final int REQUERITSTFG = 6;
 
     //CONSTRUCTORA
     public Assignatura() {

@@ -78,4 +78,8 @@ public class ControladorDomini {
     public HashMap<String, String> getDadesAcces(Estudiant e) {
         return e.getdadesAccesIgema();
     }
+
+    public String getNomCognoms(String dni) throws SQLException {
+        return ControladorDades.getInstancia().getNomCognoms(dni);
+    }
 }

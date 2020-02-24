@@ -53,7 +53,8 @@ public class DadesAssignaturaMatricula {
 
     public HashMap<Integer, String> getAssignaturesMatriculaPerAssigICurs(int codiAssig, String curs) throws SQLException {
         HashMap<Integer, String> assigsMat = new HashMap<>();
-        String sql = "SELECT am.IdAssignaturaMatricula, am.VEGADA, am.nota, am.qualificacio, e.NOMBRE, e.APELLIDOS, e.DNI" +
+        String sql = "SELECT am.IdAssignaturaMatricula, am.VEGADA, am.nota, am.qualificacio, e.NOMBRE, e.APELLIDOS, e.DNI," +
+                " am.RECONEGUDA, am.CONVALIDADA" +
                 " FROM AssignaturesMatricula am, Matricules m, Estudiants e " +
                 " WHERE am.IDMatricula = m.nummat AND m.NIF = e.DNI" +
                 " AND am.IdAssignatura = " + codiAssig + " AND m.PeriodeAcademic = '" + curs + "' " +
@@ -61,7 +62,8 @@ public class DadesAssignaturaMatricula {
 
         PreparedStatement ps;
         ps = con.prepareCall("SELECT am.IdAssignaturaMatricula, am.VEGADA, am.nota, am.qualificacio, e.NOMBRE," +
-                "e.APELLIDOS, e.DNI FROM AssignaturesMatricula am, Matricules m, Estudiants e " +
+                "e.APELLIDOS, e.DNI, am.RECONEGUDA, am.CONVALIDADA " +
+                "FROM AssignaturesMatricula am, Matricules m, Estudiants e " +
                 "WHERE am.IDMatricula = m.nummat AND m.NIF = e.DNI AND am.IdAssignatura = ? AND" +
                 " m.PeriodeAcademic = ? ORDER BY e.NOMBRE");
         ps.setInt(1, codiAssig);
@@ -73,7 +75,8 @@ public class DadesAssignaturaMatricula {
                 Integer id = rs.getInt(1);
                 String result = rs.getInt(2) + "/" + rs.getDouble(3) + "/" +
                         rs.getString(4) + "/" + rs.getString(5) + "/" +
-                        rs.getString(6) + "/" + rs.getString(7);
+                        rs.getString(6) + "/" + rs.getString(7) + "/" +
+                        rs.getBoolean(8) + "/" + rs.getBoolean(9);
                 assigsMat.put(id, result);
             }
         } else {

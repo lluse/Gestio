@@ -71,4 +71,8 @@ public final class ControladorDades {
     public Assignatura getDadesAssignatura(int i) throws SQLException {
         return DadesAssignatura.getInstancia().getAssignatura(i);
     }
+
+    public String getNomCognoms(String dni) throws SQLException {
+        return DadesEstudiant.getInstancia().getNomCognoms(dni);
+    }
 }

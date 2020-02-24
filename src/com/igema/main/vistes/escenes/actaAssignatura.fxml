@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="742.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igema.main.vistes.ActaAssignatura">
+   <children>
+      <Text layoutX="84.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="ACTES">
+         <font>
+            <Font size="14.0" />
+         </font></Text>
+      <Text fx:id="assignatura" layoutX="87.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="Text" />
+      <Pane prefHeight="155.0" prefWidth="775.0">
+         <children>
+             <ImageView fitHeight="125.0" fitWidth="275.0" layoutX="115.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+                 <image>
+                     <Image url="@images/logo_igema.jpg" />
+                 </image>
+             </ImageView>
+             <ImageView fitHeight="125.0" fitWidth="275.0" layoutX="450.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+                 <image>
+                     <Image url="@images/Logo-URV.jpg" />
+                 </image>
+             </ImageView>
+         </children>
+      </Pane>
+      <Text fx:id="curs" layoutX="87.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="Text" />
+      <Text fx:id="semestre" layoutX="87.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="Text" />
+      <ComboBox fx:id="estatActa" layoutX="140.0" layoutY="260.0" prefWidth="150.0" />
+      <Text layoutX="87.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="Estat:" />
+      <TableView fx:id="acta" layoutX="87.0" layoutY="310.0" prefHeight="308.0" prefWidth="816.0">
+        <columns>
+          <TableColumn fx:id="colEstudiant" editable="false" prefWidth="428.0" text="Estudiant" />
+          <TableColumn fx:id="colQualificacio" editable="false" prefWidth="93.0" text="Qualificacio" />
+            <TableColumn fx:id="colNota" editable="false" prefWidth="166.0" sortable="false" text="Nota" />
+            <TableColumn fx:id="colBtn" prefWidth="128.0" text="Expedient Acadèmic" />
+        </columns>
+      </TableView>
+      <Button layoutX="173.0" layoutY="639.0" mnemonicParsing="false" onAction="#generarPDF" prefHeight="81.0" prefWidth="158.0" text="Guardar en PDF" />
+      <Button fx:id="sortir" layoutX="582.0" layoutY="657.0" mnemonicParsing="false" onAction="#sortir" prefHeight="45.0" prefWidth="94.0" text="Sortir" />
+   </children>
+</AnchorPane>

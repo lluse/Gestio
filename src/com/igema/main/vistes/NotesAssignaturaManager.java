@@ -2,10 +2,11 @@ package com.igema.main.vistes;
 
 
 import com.igema.main.domini.controlador.ControladorDomini;
+import com.igema.main.vistes.classes.ComboAssignatures;
+import com.igema.main.vistes.classes.ModelNotes;
+
+
 import javafx.application.Application;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,160 +20,15 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class NotesAssignaturaManager extends Application{
 
-
-    class ComboAssigs {
-        Integer id;
-        String nom;
-
-        ComboAssigs(Integer i, String n) {
-            id = i;
-            nom = n;
-        }
-
-        @Override
-        public String toString() {
-            return nom;
-        }
-
-        public int getId() { return id; }
-    }
-
-    public static class ModelAlumne {
-        private final SimpleIntegerProperty id;
-        private final SimpleStringProperty nom;
-        private final SimpleStringProperty cognom;
-        private final SimpleIntegerProperty vegada;
-        private SimpleDoubleProperty nota;
-        private SimpleStringProperty qualificacio;
-        private final SimpleStringProperty dni;
-        private int dirtyBit;
-        private Double oldValueNota;
-        private String oldValueQuali;
-
-        public ModelAlumne(SimpleIntegerProperty id, SimpleStringProperty nom, SimpleStringProperty cognom, SimpleStringProperty dni,
-                           SimpleDoubleProperty nota, SimpleStringProperty qualificacio, SimpleIntegerProperty vegada) {
-            this.id = id;
-            this.nom = nom;
-            this.cognom = cognom;
-            this.dni = dni;
-            this.nota = nota;
-            this.qualificacio = qualificacio;
-            this.vegada = vegada;
-            dirtyBit = 0;
-            oldValueNota = null;
-            oldValueQuali = null;
-        }
-
-        public ModelAlumne(SimpleStringProperty nom, SimpleStringProperty cognom, SimpleStringProperty dni) {
-            this.nom = nom;
-            this.cognom = cognom;
-            this.dni = dni;
-            id = null;
-            vegada = null;
-        }
-
-        public ModelAlumne(SimpleStringProperty nom, SimpleStringProperty cognom) {
-            this.nom = nom;
-            this.cognom = cognom;
-            id = null;
-            vegada = null;
-            dni =null;
-        }
-
-        private int getId() { return id.get();}
-
-        public String getNom() {
-            return nom.get();
-        }
-
-        public int getVegada() {
-            return vegada.get();
-        }
-
-        public SimpleIntegerProperty vegadaProperty() {
-            return vegada;
-        }
-
-        public SimpleDoubleProperty notaProperty() {
-            return nota;
-        }
-
-        public SimpleStringProperty qualificacioProperty() {
-            return qualificacio;
-        }
-
-        public String getDni() {
-            return dni.get();
-        }
-
-        public SimpleStringProperty dniProperty() {
-            return dni;
-        }
-
-        public SimpleStringProperty nomProperty() {
-            return nom;
-        }
-
-        public String getCognom() {
-            return cognom.get();
-        }
-
-        public SimpleStringProperty cognomProperty() {
-            return cognom;
-        }
-
-        private double getNota() {
-            return nota.get();
-        }
-
-        private String getQualificacio() {
-            return qualificacio.get();
-        }
-
-        private void setNota(double nota) {
-            this.nota.set(nota);
-        }
-
-        private void setQualificacio(String qualificacio) {
-            this.qualificacio.set(qualificacio);
-        }
-
-        private int getDirtyBit() {
-            return dirtyBit;
-        }
-
-        private void setDirtyBit(int dirtyBit) {
-            this.dirtyBit = dirtyBit;
-        }
-
-        private Double getOldValueNota() {
-            return oldValueNota;
-        }
-
-        private void setOldValueNota(Double oldValue) {
-            this.oldValueNota = oldValue;
-        }
-
-        private String getOldValueQuali() {
-            return oldValueQuali;
-        }
-
-        private void setOldValueQuali(String oldValueQuali) {
-            this.oldValueQuali = oldValueQuali;
-        }
-    }
-
-    private ObservableList<ComboAssigs> list; //llista dels cursos academics
-    private ObservableList<ModelAlumne> LlistaTaula; //Llista dels alumnes trobats
+    private ObservableList<ComboAssignatures> list; //llista dels cursos academics
 
     @FXML
     private ComboBox assignaturaComboBox;
@@ -180,19 +36,23 @@ public class NotesAssignaturaManager extends Application{
     private ComboBox<String> cursComboBox;
 
     @FXML
-    private TableView alumnes;
+    private TableView<ModelNotes> alumnes;
     @FXML
-    private TableColumn<ModelAlumne, String> colNom;
+    private TableColumn<ModelNotes, String> colNom;
     @FXML
-    private TableColumn<ModelAlumne, String> colCognoms;
+    private TableColumn<ModelNotes, String> colCognoms;
     @FXML
-    private TableColumn<ModelAlumne, String> colDni;
+    private TableColumn<ModelNotes, String> colDni;
     @FXML
-    private TableColumn<ModelAlumne, Double> colNota;
+    private TableColumn<ModelNotes, String> colNota;
     @FXML
-    private TableColumn<ModelAlumne, String> colQualificacio;
+    private TableColumn<ModelNotes, String> colQualificacio;
     @FXML
-    private TableColumn<ModelAlumne, Integer> colVegada;
+    private TableColumn<ModelNotes, Integer> colVegada;
+    @FXML
+    private TableColumn<ModelNotes, CheckBox> colReconeguda;
+    @FXML
+    private TableColumn<ModelNotes, CheckBox> colConvalidada;
 
     @FXML
     private Button editar;
@@ -201,12 +61,18 @@ public class NotesAssignaturaManager extends Application{
     @FXML
     private Button cancelar;
 
+    //informació que ens servirà per les actes
+    protected static ObservableList<ModelNotes> llistaTaula = FXCollections.observableArrayList(); //Llista dels alumnes trobats
+    protected static String nomAssignatura;
+    protected static String cursAcad;
+    protected static int semestre;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         String sceneFile = "escenes/notesAssignatura.fxml";
         AnchorPane root = (AnchorPane) FXMLLoader.load(getClass().getResource(sceneFile));
-        Scene scene = new Scene(root, 934, 500);
+        Scene scene = new Scene(root, 1025, 515);
         primaryStage.setTitle("Notes");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -215,9 +81,8 @@ public class NotesAssignaturaManager extends Application{
 
     @FXML
     private void initialize() throws SQLException {
-        importarAssignatures();
+        list = FXCollections.observableArrayList(ComboAssignatures.importarAssignatures());
 
-        LlistaTaula = null;
         alumnes.setEditable(false);
         editar.setDisable(true);
         guardar.setDisable(true);
@@ -226,31 +91,34 @@ public class NotesAssignaturaManager extends Application{
         //permite que las celdas puedan seleccionarse individualmente
         alumnes.getSelectionModel().cellSelectionEnabledProperty().set(true);
 
-        colNom.setCellValueFactory(new PropertyValueFactory<ModelAlumne, String>("nom"));
-        colCognoms.setCellValueFactory(new PropertyValueFactory<ModelAlumne, String>("cognom"));
-        colDni.setCellValueFactory(new PropertyValueFactory<ModelAlumne, String>("dni"));
+        colNom.setCellValueFactory(new PropertyValueFactory("nom"));
+        colCognoms.setCellValueFactory(new PropertyValueFactory("cognom"));
+        colDni.setCellValueFactory(new PropertyValueFactory("dni"));
 
 
         setupNotaColumn();
 
-        colQualificacio.setCellValueFactory(new PropertyValueFactory<ModelAlumne, String>("qualificacio"));
-        colVegada.setCellValueFactory(new PropertyValueFactory<ModelAlumne, Integer>("vegada"));
+        colQualificacio.setCellValueFactory(new PropertyValueFactory("qualificacio"));
+        colVegada.setCellValueFactory(new PropertyValueFactory("vegada"));
+        colReconeguda.setCellValueFactory(new PropertyValueFactory("reconeguda"));
+        colConvalidada.setCellValueFactory(new PropertyValueFactory("convalidada"));
+
 
         cursComboBox.getItems().addAll("2018-2019", "2019-2020", "2020-2021", "2021-2022");
         assignaturaComboBox.setItems(list);
         assignaturaComboBox.getSelectionModel().selectFirst(); //Select the first element
 
         //ComboBox assignatures
-        assignaturaComboBox.setCellFactory(new Callback<ListView<ComboAssigs>, ListCell<ComboAssigs>>() {
+        assignaturaComboBox.setCellFactory(new Callback<ListView<ComboAssignatures>, ListCell<ComboAssignatures>>() {
             @Override
-            public ListCell call(ListView<ComboAssigs> param) {
-                final ListCell<ComboAssigs> cell = new ListCell<ComboAssigs>() {
+            public ListCell call(ListView<ComboAssignatures> param) {
+                final ListCell<ComboAssignatures> cell = new ListCell<ComboAssignatures>() {
                     @Override
-                    protected void updateItem(ComboAssigs c, boolean b) {
+                    protected void updateItem(ComboAssignatures c, boolean b) {
                         super.updateItem(c, b);
-
                         if (c != null) {
-                            setText(c.nom);
+                            setText(c.getNom()); //Nomes volem que es mostri el nom de l'assignatura, per en realitat a la
+                                            //ComboBox hi ha el nom i el id.
                         } else {
                             setText(null);
                         }
@@ -262,28 +130,50 @@ public class NotesAssignaturaManager extends Application{
     }
 
     private void setupNotaColumn() {
-        colNota.setCellValueFactory(new PropertyValueFactory<ModelAlumne, Double>("nota"));
+        colNota.setCellValueFactory(new PropertyValueFactory("nota"));
         //permitir editar sobre la columna nota
-        colNota.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-
+        colNota.setCellFactory(TextFieldTableCell.forTableColumn());
         try {
             colNota.setOnEditCommit(event -> {
                 Object value = event.getNewValue();
-                if (value instanceof Double) {
-                    Double novaNota = (Double) value;
-                    if (novaNota <= 10.0 && novaNota >= 0.0) {
-                        ModelAlumne m = (event.getTableView().getItems().get(event.getTablePosition().getRow()));
+                if (value instanceof String){
+                    ModelNotes m = (event.getTableView().getItems().get(event.getTablePosition().getRow()));
+                    String sNota = (String) value;
+                    char[] novaNota = sNota.toCharArray();
+                    if (sNota == "NP") {
                         m.setOldValueNota(m.getNota());
                         m.setOldValueQuali(m.getQualificacio());
-                        m.setNota(novaNota);
-                        m.setQualificacio(modificaQualificacio(novaNota));
+                        m.setNota("NP");
+                        m.setQualificacio("NO PRESENTAT");
                         m.setDirtyBit(1);
-                        alumnes.refresh();
-                    } else {
-                        editCancel();
-                        throw new NumberFormatException("La nota que s'ha introduit no es valida. (0 <= nota <= 10");
                     }
-                } else {
+                    else if (novaNota[novaNota.length - 1] == 'm') {
+                        novaNota = Arrays.copyOfRange(novaNota, 0, novaNota.length - 1);
+                        String notaDef = String.valueOf(novaNota);
+                        double notaDouble = Double.parseDouble(notaDef); //Per comprovar si no salta cap excepcio
+                        m.setOldValueNota(m.getNota());
+                        m.setOldValueQuali(m.getQualificacio());
+                        m.setNota(notaDef);
+                        m.setQualificacio("MH");
+                        m.setDirtyBit(1);
+                    } else {
+                        double nota = Double.parseDouble(sNota);
+                        if (nota <= 10.0 && nota >= 0.0) {
+                            m.setOldValueNota(m.getNota());
+                            m.setOldValueQuali(m.getQualificacio());
+                            m.setNota(String.valueOf(nota));
+                            m.setQualificacio(modificaQualificacio(nota));
+                            m.setDirtyBit(1);
+
+                            m.getReconeguda().setSelected(false);
+                            alumnes.refresh();
+                        } else {
+                            editCancel();
+                            throw new NumberFormatException("La nota que s'ha introduit no es valida. (0 <= nota <= 10)");
+                        }
+                    }
+                }
+                else {
                     editCancel();
                     throw new NumberFormatException("No s'ha introduit un número");
                 }
@@ -294,9 +184,7 @@ public class NotesAssignaturaManager extends Application{
             alert.setHeaderText("Error en l'edició de la nota");
             alert.setContentText(n.toString());
             alert.showAndWait().ifPresent(rs -> {
-                if (rs == ButtonType.OK) {
-                    System.out.println("Pressed OK.");
-                }
+
             });
         }
     }
@@ -311,53 +199,76 @@ public class NotesAssignaturaManager extends Application{
     @FXML
     private void cargarTaula() throws SQLException {
         if (assignaturaComboBox.getValue() != null && cursComboBox.getValue() != null) {
-            ComboAssigs ca = (ComboAssigs)assignaturaComboBox.getValue();
+            ComboAssignatures ca = (ComboAssignatures)assignaturaComboBox.getValue();
             int id = ca.getId();
-            String curs = cursComboBox.getValue();
 
-            HashMap<Integer, String> dadesTaula = ControladorDomini.getInstancia().cargarTaulaNotes(id, curs);
+            nomAssignatura = id + " " + ca.getNom() + " " + ", Grup A";
+            semestre = ca.getSemestre();
+            cursAcad = cursComboBox.getValue();
 
+            HashMap<Integer, String> dadesTaula = ControladorDomini.getInstancia().cargarTaulaNotes(id, cursAcad);
             mostrarResultats(dadesTaula);
+
+            alumnes.getItems().addAll(llistaTaula);
+            alumnes.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
             editar.setDisable(false);
         }
     }
 
     private void mostrarResultats(HashMap<Integer, String> dadesTaula) {
+        llistaTaula.clear();
         alumnes.getItems().clear();
         dadesTaula.forEach((k, v) -> {
-            SimpleIntegerProperty id = new SimpleIntegerProperty(k);
+            int id = k;
 
             String[] valor = v.split("/");
-            //am.VEGADA, am.nota, am.qualificacio, e.nom, e.cognom, e.DNI" +
-            SimpleIntegerProperty vegada = new SimpleIntegerProperty(Integer.parseInt(valor[0]));
-            SimpleDoubleProperty nota = new SimpleDoubleProperty(Double.parseDouble(valor[1]));
-            SimpleStringProperty qualificacio = new SimpleStringProperty(valor[2]);
-            SimpleStringProperty nom = new SimpleStringProperty(valor[3]);
-            SimpleStringProperty cognoms = new SimpleStringProperty(valor[4]);
-            SimpleStringProperty dni = new SimpleStringProperty(valor[5]);
 
+            int vegada = Integer.parseInt(valor[0]);
+            String nota = valor[1];
+            String qualificacio;
+            if (Double.parseDouble(nota) == 0) {
+                nota = "NP";
+                qualificacio = "NO PRESENTAT";
+            }
+            else qualificacio = valor[2];
+            String nom = valor[3];
+            String cognoms = valor[4];
+            String dni = valor[5];
 
-            ModelAlumne m = new ModelAlumne(id, nom, cognoms, dni, nota, qualificacio, vegada);
-            //ModelAlumne m = new ModelAlumne(nom, cognoms, dni);
-            alumnes.getItems().add(m);
-            //System.out.println(m.id + " " + " " + m.getNom() + " " + m.getCognom()+ " " + " " + m.getDni() + " "
-            //+ " " +  m.getNota() + " " + m.getQualificacio() + " " +  m.getVegada());
+            boolean b = valor[6].contains("true");
+            boolean b1 = valor[7].contains("true");
+
+            CheckBox reconeguda;
+            CheckBox convalidada;
+            if (b) {
+                reconeguda = new CheckBox();
+                reconeguda.setSelected(true);
+            } else {
+                reconeguda = new CheckBox();
+                reconeguda.setSelected(false);
+            }
+
+            if (b1) {
+                convalidada = new CheckBox();
+                convalidada.setSelected(true);
+            } else {
+                convalidada = new CheckBox();
+                convalidada.setSelected(false);
+            }
+
+            llistaTaula.add(
+                    new ModelNotes(
+                            id,
+                            nom,
+                            cognoms,
+                            dni,
+                            nota,
+                            qualificacio,
+                            vegada,
+                            reconeguda,
+                            convalidada)
+            );
         });
-        alumnes.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    }
-
-
-    private void importarAssignatures() throws SQLException {
-        List<String> assigs = ControladorDomini.getInstancia().importarAssignatures();
-        List<ComboAssigs> combo = new ArrayList<ComboAssigs>();
-        for (String s : assigs) {
-            String[] arrayS = s.split("/");
-            int id = Integer.parseInt(arrayS[0]);
-            String nom = arrayS[1];
-            ComboAssigs ca = new ComboAssigs(id, nom);
-            combo.add(ca);
-        }
-        list = FXCollections.observableArrayList(combo);
     }
 
     @FXML
@@ -384,20 +295,54 @@ public class NotesAssignaturaManager extends Application{
         Optional<ButtonType> action = alert.showAndWait();
 
         if (action.get() == ButtonType.OK) {
-            List<ModelAlumne> dades =  alumnes.getItems();
+            List<ModelNotes> dades =  alumnes.getItems();
             boolean updated = false;
-            for (ModelAlumne d : dades) {
-                if (d.getDirtyBit() == 1) {
-                    int idAssignaturaMatricula = d.getId();
-                    double nota = d.getNota();
-                    String quali = d.getQualificacio();
+            for (ModelNotes d : dades) {
+                if (d.getReconeguda().isSelected()) {
+                    int id = d.getId();
+                    double nota = 5.0;
 
-                    String sql = "UPDATE Assignaturesmatricula SET nota = " + nota + ", qualificacio = '" +
-                            quali + "' WHERE IdAssignaturaMatricula = " + idAssignaturaMatricula;
+                    String sql = "UPDATE Assignaturesmatricula SET RECONEGUDA = 'True'," +
+                            " nota = " + nota + ", qualificacio = 'RECONEGUDA'" +
+                            " WHERE IdAssignaturaMatricula = " + id;
+
                     int status = ControladorDomini.executeQuery(sql);
                     if (status > 0) {
                         d.setDirtyBit(0); d.setOldValueNota(null); d.setOldValueQuali(null);
                         updated = true;
+                        alumnes.refresh();
+                    }
+                }
+
+                else if (d.getDirtyBit() == 1) {
+                    int idAssignaturaMatricula = d.getId();
+                    Double nota;
+                    if (d.getNota() == "NP") nota = 0.0;
+                    else nota = Double.parseDouble(d.getNota());
+
+                    String quali = d.getQualificacio();
+                    String sql;
+                    if (!d.getReconeguda().isSelected()) {
+                        sql = "UPDATE Assignaturesmatricula SET RECONEGUDA = 'False', " +
+                                "nota = " + nota + ", qualificacio = '" + quali + "' " +
+                                "WHERE IdAssignaturaMatricula = " + idAssignaturaMatricula;
+                    }
+                    else {
+                        sql = "UPDATE Assignaturesmatricula SET nota = " + nota + ", qualificacio = '" +
+                                quali + "' WHERE IdAssignaturaMatricula = " + idAssignaturaMatricula;
+                    }
+                    int status = ControladorDomini.executeQuery(sql);
+                    if (status > 0) {
+                        d.setDirtyBit(0);
+                        d.setOldValueNota(null);
+                        d.setOldValueQuali(null);
+                        updated = true;
+                        alumnes.refresh();
+                    }
+                    else if (status == -1) {
+                        mostrarErrorGuardarCancelar("Guardar", "Hi ha hagut un problema amb els " +
+                                "valors numèrics de la nota: '" + nota + "'. Si us plau revisi que estiguin en format correcte.");
+                        updated = false;
                     }
                 }
             }
@@ -419,10 +364,10 @@ public class NotesAssignaturaManager extends Application{
         alert.setContentText("Estàs segur/a que vols cancelar l'operació?");
         Optional<ButtonType> action = alert.showAndWait();
         if (action.get() == ButtonType.OK) {
-            List<ModelAlumne> dades =  alumnes.getItems();
-            for (ModelAlumne d : dades) {
+            List<ModelNotes> dades =  alumnes.getItems();
+            for (ModelNotes d : dades) {
                 if (d.getDirtyBit() == 1) {
-                    d.setNota(d.getOldValueNota());
+                    d.setNota(String.valueOf(d.getOldValueNota()));
                     d.setQualificacio(d.getOldValueQuali());
                     d.setDirtyBit(0); d.setOldValueNota(null); d.setOldValueQuali(null);
                 }
@@ -433,11 +378,30 @@ public class NotesAssignaturaManager extends Application{
     }
 
     @FXML
-    public void editStart() {
+    public void generarActa() {
+        try {
+            String sceneFile = "escenes/actaAssignatura.fxml";
+            AnchorPane root = (AnchorPane) FXMLLoader.load(getClass().getResource(sceneFile));
+            Scene scene = new Scene(root, 1000, 676);
+            Stage stage = new Stage();
+            stage.setTitle("Acta");
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    public void editCommit(TextFieldTableCell<ModelAlumne, Double> t) {
+    public void editStart() {
+        colReconeguda.setOnEditStart(event -> {
+            Object newValue = event.getNewValue();
+            Object oldValue = event.getOldValue();
+        });
+    }
+
+    @FXML
+    public void editCommit(TextFieldTableCell<ModelNotes, Double> t) {
     }
 
     @FXML
@@ -455,6 +419,18 @@ public class NotesAssignaturaManager extends Application{
             desactivarEdicio();
         }
     }
+
+    public void mostrarErrorGuardarCancelar(String capçalera, String missatge) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(null);
+        alert.setTitle(capçalera);
+        alert.setContentText(missatge);
+        Optional<ButtonType> action1 = alert.showAndWait();
+        if (action1.get() == ButtonType.OK) {
+            desactivarEdicio();
+        }
+    }
+
 
     public static void main(String[] args) {
         launch(args);

@@ -1,6 +1,7 @@
 package com.igema.main.dades.classes;
 
 import com.igema.main.dades.conexionBD.Conexion;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -21,6 +22,7 @@ public class Update {
                 return st.executeUpdate(sql);
             } catch (SQLException s) {
                 s.printStackTrace();
+                return -1;
             }
         } else {
             System.out.println("No s'ha establert connexió amb la base de dades");

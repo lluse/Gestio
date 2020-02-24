@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="521.0" prefWidth="934.0" xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igema.main.vistes.NotesAssignaturaManager">
-        <ComboBox id="assignaturaComboBox" fx:id="assignaturaComboBox" layoutX="88.0" layoutY="33.0" onAction="#cargarTaula" prefHeight="25.0" prefWidth="381.0" />
-        <Text layoutX="14.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignatura" />
-        <ComboBox id="cursComboBox" fx:id="cursComboBox" layoutX="581.0" layoutY="33.0" onAction="#cargarTaula" prefHeight="25.0" prefWidth="197.0" />
-        <Text layoutX="492.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Curs academic" />
-        <TableView fx:id="alumnes" editable="true" layoutX="44.0" layoutY="123.0" prefHeight="303.0" prefWidth="851.0">
-            <columns>
-                <TableColumn fx:id="colNom" editable="false" prefWidth="149.0" text="Nom" />
-                <TableColumn fx:id="colCognoms" editable="false" prefWidth="316.0" sortable="false" text="Cognoms" />
-                <TableColumn fx:id="colDni" editable="false" minWidth="0.0" prefWidth="107.0" text="DNI" />
-                <TableColumn fx:id="colNota" minWidth="0.0" onEditCancel="#editCancel" onEditStart="#editStart" prefWidth="59.0" text="Nota" />
-                <TableColumn fx:id="colQualificacio" editable="false" prefWidth="166.0" text="Qualificacio" />
-                <TableColumn fx:id="colVegada" editable="false" prefWidth="53.0" text="Vegada" />
-            </columns>
-        </TableView>
-        <Button fx:id="editar" layoutX="151.0" layoutY="462.0" mnemonicParsing="false" onAction="#activarEdicio" prefHeight="33.0" prefWidth="113.0" text="Editar" />
-        <Button fx:id="guardar" layoutX="599.0" layoutY="462.0" mnemonicParsing="false" onAction="#guardarCanvis" prefHeight="33.0" prefWidth="113.0" text="Guardar" />
-        <Button fx:id="cancelar" layoutX="778.0" layoutY="462.0" mnemonicParsing="false" onAction="#cancelarCanvis" prefHeight="33.0" prefWidth="113.0" text="Cancelar" />
+<AnchorPane prefHeight="515.0" prefWidth="1025.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igema.main.vistes.NotesAssignaturaManager">
+   <children>
+           <ComboBox id="assignaturaComboBox" fx:id="assignaturaComboBox" layoutX="88.0" layoutY="33.0" onAction="#cargarTaula" prefHeight="25.0" prefWidth="381.0" />
+           <Text layoutX="14.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignatura" />
+           <ComboBox id="cursComboBox" fx:id="cursComboBox" layoutX="581.0" layoutY="33.0" onAction="#cargarTaula" prefHeight="25.0" prefWidth="197.0" />
+           <Text layoutX="492.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Curs academic" />
+           <TableView fx:id="alumnes" editable="true" layoutX="44.0" layoutY="123.0" prefHeight="303.0" prefWidth="910.0">
+               <columns>
+                   <TableColumn fx:id="colNom" editable="false" prefWidth="120.0" text="Nom" />
+                   <TableColumn fx:id="colCognoms" editable="false" prefWidth="250.0" text="Cognoms" />
+                   <TableColumn fx:id="colDni" editable="false" minWidth="0.0" prefWidth="113.0" sortable="false" text="DNI" />
+                   <TableColumn fx:id="colNota" minWidth="0.0" onEditCancel="#editCancel" onEditStart="#editStart" prefWidth="50.0" text="Nota" />
+                   <TableColumn fx:id="colQualificacio" editable="false" prefWidth="125.0" sortable="false" text="Qualificacio" />
+                   <TableColumn fx:id="colVegada" editable="false" prefWidth="50.0" sortable="false" text="Vegada" />
+            <TableColumn fx:id="colReconeguda" onEditStart="#editStart" prefWidth="100.0" sortable="false" text="Reconeguda" />
+            <TableColumn fx:id="colConvalidada" prefWidth="100.0" sortable="false" text="Convalidada" />
+               </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+           </TableView>
+           <Button fx:id="editar" layoutX="88.0" layoutY="462.0" mnemonicParsing="false" onAction="#activarEdicio" prefHeight="33.0" prefWidth="113.0" text="Editar" />
+           <Button fx:id="guardar" layoutX="599.0" layoutY="462.0" mnemonicParsing="false" onAction="#guardarCanvis" prefHeight="33.0" prefWidth="113.0" text="Guardar" />
+           <Button fx:id="cancelar" layoutX="778.0" layoutY="462.0" mnemonicParsing="false" onAction="#cancelarCanvis" prefHeight="33.0" prefWidth="113.0" text="Cancelar" />
+      <Button fx:id="acta" layoutX="252.0" layoutY="462.0" mnemonicParsing="false" onAction="#generarActa" prefHeight="33.0" prefWidth="113.0" text="Acta" />
+   </children>
 </AnchorPane>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="150.0" prefWidth="510.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.igema.main.vistes.GuardarPDFManager">
+   <children>
+      <TextField fx:id="path" layoutX="14.0" layoutY="45.0" prefHeight="29.0" prefWidth="362.0" />
+      <Button layoutX="382.0" layoutY="47.0" mnemonicParsing="false" onAction="#browse" text="Seleccionar Carpeta" />
+      <Button fx:id="guardar" layoutX="353.0" layoutY="110.0" mnemonicParsing="false" onAction="#guardarPDF" text="Guardar" />
+      <Button fx:id="cancelar" layoutX="433.0" layoutY="110.0" mnemonicParsing="false" onAction="#cancelarOperacio" text="Cancelar" />
+   </children>
+</AnchorPane>

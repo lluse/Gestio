@@ -76,12 +76,13 @@ public class DadesAssignatura {
     public ArrayList<String> importarAssignatura() throws SQLException {
         ArrayList<String> assigs = new ArrayList<>();
         PreparedStatement ps;
-        ps = con.prepareCall("SELECT * FROM Assignatures");
+        ps = con.prepareCall("SELECT Codi, Assignatura, SEMESTRE FROM Assignatures");
         if (con != null) {
             ps.execute();
             ResultSet rs = ps.getResultSet();
             while (rs.next()) {
-                String s = rs.getInt("Codi") + "/" + rs.getString("Assignatura");
+                String s = rs.getInt("Codi") + "/" + rs.getString("Assignatura")
+                        + "/" + rs.getInt("SEMESTRE");
                 assigs.add(s);
             }
         } else {
