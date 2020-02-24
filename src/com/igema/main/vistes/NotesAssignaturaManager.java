@@ -60,6 +60,8 @@ public class NotesAssignaturaManager extends Application{
     private Button guardar;
     @FXML
     private Button cancelar;
+    @FXML
+    private Button acta;
 
     //informació que ens servirà per les actes
     protected static ObservableList<ModelNotes> llistaTaula = FXCollections.observableArrayList(); //Llista dels alumnes trobats
@@ -87,6 +89,7 @@ public class NotesAssignaturaManager extends Application{
         editar.setDisable(true);
         guardar.setDisable(true);
         cancelar.setDisable(true);
+        acta.setDisable(true);
 
         //permite que las celdas puedan seleccionarse individualmente
         alumnes.getSelectionModel().cellSelectionEnabledProperty().set(true);
@@ -199,6 +202,7 @@ public class NotesAssignaturaManager extends Application{
     @FXML
     private void cargarTaula() throws SQLException {
         if (assignaturaComboBox.getValue() != null && cursComboBox.getValue() != null) {
+            acta.setDisable(false);
             ComboAssignatures ca = (ComboAssignatures)assignaturaComboBox.getValue();
             int id = ca.getId();
 
@@ -300,7 +304,7 @@ public class NotesAssignaturaManager extends Application{
             for (ModelNotes d : dades) {
                 if (d.getReconeguda().isSelected()) {
                     int id = d.getId();
-                    double nota = 5.0;
+                    double nota = Double.parseDouble(d.getNota());
 
                     String sql = "UPDATE Assignaturesmatricula SET RECONEGUDA = 'True'," +
                             " nota = " + nota + ", qualificacio = 'RECONEGUDA'" +
@@ -309,6 +313,23 @@ public class NotesAssignaturaManager extends Application{
                     int status = ControladorDomini.executeQuery(sql);
                     if (status > 0) {
                         d.setDirtyBit(0); d.setOldValueNota(null); d.setOldValueQuali(null);
+                        updated = true;
+                        alumnes.refresh();
+                    }
+                }
+
+                else if (d.getConvalidada().isSelected()) {
+                    int id = d.getId();
+
+                    String sql = "UPDATE Assignaturesmatricula SET CONVALIDADA = 'True'," +
+                            " nota = 5.0, qualificacio = 'APROVAT'" +
+                            " WHERE IdAssignaturaMatricula = " + id;
+
+                    int status = ControladorDomini.executeQuery(sql);
+                    if (status > 0) {
+                        d.setDirtyBit(0); d.setOldValueNota(null); d.setOldValueQuali(null);
+                        d.setNota("CV");
+                        d.setQualificacio("APROVAT");
                         updated = true;
                         alumnes.refresh();
                     }
@@ -430,7 +451,6 @@ public class NotesAssignaturaManager extends Application{
             desactivarEdicio();
         }
     }
-
 
     public static void main(String[] args) {
         launch(args);
